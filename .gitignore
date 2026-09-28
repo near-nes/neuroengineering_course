@@ -3,4 +3,5 @@ neuro_env
 experiment_info.txt
 active_fes_trials.csv
 2_Computational Neuroscience/target
+2_Computational Neuroscience/target/*
 2_Computational Neuroscience/report
