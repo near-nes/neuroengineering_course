@@ -81,8 +81,7 @@ model hh_psc_alpha_neuron:
 
         inline I_syn_exc pA = convolve(K_syn_exc, exc_spikes) * pA
         inline I_syn_inh pA = convolve(K_syn_inh, inh_spikes) * pA
-        inline I_Na  pA = (1 - p_mut) * g_Na * Act_m * Act_m * Act_m * Inact_h * ( V_m - E_Na )
-        inline I_NaMut pA = p_mut * g_Na * Act_m**3 * (V_m - E_Na)  
+        inline I_Na  pA = g_Na * Act_m * Act_m * Act_m * Inact_h * ( V_m - E_Na )
         inline I_K   pA = g_K * Act_n * Act_n * Act_n * Act_n * ( V_m - E_K )
         inline I_L   pA = g_L * ( V_m - E_L )
 
@@ -101,7 +100,7 @@ model hh_psc_alpha_neuron:
         inline beta_h  real = 1. / ( 1. + exp( -( V_m / mV + 35. ) / 10. ) )
         Inact_h' = ( alpha_h * ( 1 - Inact_h ) - beta_h * Inact_h ) / ms # h-variable
 
-        V_m' = ( -( I_Na + I_NaMut + I_K + I_L ) + I_e + I_stim + I_syn_exc - I_syn_inh ) / C_m
+        V_m' = ( -( I_Na + I_K + I_L ) + I_e + I_stim + I_syn_exc - I_syn_inh ) / C_m
         refr_t' = -1e3 * ms/s    # refractoriness is implemented as an ODE, representing a timer counting back down to zero. XXX: TODO: This should simply read ``refr_t' = -1 / s`` (see https://github.com/nest/nestml/issues/984)
 
     parameters:
@@ -120,8 +119,6 @@ model hh_psc_alpha_neuron:
 
         # constant external input current
         I_e pA = 0 pA
-
-        p_mut real = 0.02 
 
     internals:
         alpha_n_init real = ( 0.01 * ( V_m_init / mV + 55. ) ) / ( 1. - exp( -( V_m_init / mV + 55. ) / 10. ) )
@@ -153,4 +150,3 @@ model hh_psc_alpha_neuron:
         # threshold crossing and maximum
         refr_t = refr_T    # start of the refractory period
         emit_spike()
-
