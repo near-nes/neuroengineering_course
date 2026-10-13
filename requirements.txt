@@ -2,4 +2,11 @@ ipykernel
 matplotlib
 numpy
 pandas
-#scipy
+scipy
+seaborn
+scikit-learn
+librosa
+tensorflow
+sounddevice
+shap
+fairlearn
